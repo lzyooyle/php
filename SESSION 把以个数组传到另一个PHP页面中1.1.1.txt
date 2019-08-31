@@ -1,0 +1,27 @@
+php中 怎样用SESSION 把以个数组传到另一个PHP页面中
+
+PHP可以用session存储单个的值，也可以以数组形式存储和传递。示例如下：
+
+入口文件设置session数组：
+
+<?php
+
+session_start();
+
+$_SESSION['name']="baiduzhidao";
+
+$_SESSION['age']=9;
+
+在其他页面获取session数组示例：
+
+<?php 
+
+session_start(); 
+
+var_dump($_SESSION['name']);
+
+//baiduzhidao
+ 
+echo $_SESSION['age'];
+
+直接使用变量$_SESSION，在当前页赋值，在另外的页面直接使用就可以了。
