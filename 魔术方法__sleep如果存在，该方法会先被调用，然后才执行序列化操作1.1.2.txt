@@ -1,0 +1,37 @@
+在序列化对象的时候，对于对象中的一些敏感属性，我们不需要保存，这又该如何处理呢？
+
+当调用serialize()函数序列化对象时，该函数会检查类中是否存在一个魔术方法__sleep()。如果存在，该方法会先被调用，然后才执行序列化操作。可以通过重载这个方法，从而自定义序列化行为。该方法原型如下：
+
+public array __sleep ( void )
+该方法返回一个包含对象中所有应被序列化的变量名称的数组
+该方法未返回任何内容，则 NULL 被序列化，并产生一个E_NOTICE级别的错误
+__sleep()不能返回父类的私有成员的名字。这样做会产生一个E_NOTICE级别的错误。这时只能用Serializable接口来替代。
+常用于保存那些大对象时的清理工作，避免保存过多冗余数据
+看下面的例子：
+
+class User{
+    const SITE = 'uusama';
+
+    public $username;
+    public $nickname;
+    private $password;
+
+    public function __construct($username, $nickname, $password)
+    {
+        $this->username = $username;
+        $this->nickname = $nickname;
+        $this->password = $password;
+    }
+
+    // 重载序列化调用的方法
+    public function __sleep()
+    {
+        // 返回需要序列化的变量名，过滤掉password变量
+        return array('username', 'nickname');
+    }
+}
+$user = new User('uusama', 'uu', '123456');
+var_dump(serialize($user));
+返回结果如下，显然序列化的时候忽略了 password 字段的值。
+
+string(67) "O:4:"User":2:{s:8:"username";s:6:"uusama";s:8:"nickname";s:2:"uu";}"
