@@ -1,0 +1,69 @@
+在介绍这两个函数之前，我还是想说一下json。不知道大家对json了解多少，感觉自己接触php一段时间后，就已经对json有些印象，但仅仅是印象而已，我只知道它是一种数据类型，比较轻量。但是对于它的结构，我真的是模糊不清，直到现在使用它，我才了解到，所以：实践是检验你是否获得真知的一种非常有效的方法。
+
+一：首先是json_encode()，意思就是将数据转为json格式，那什么类型数据可以转为json格式呢
+
+1.对象。
+
+定义一个class，new一个对象，可以将对象转为json格式
+
+<?php
+
+   class Emp {
+
+       public $name = "";
+
+       public $hobbies  = "";
+
+       public $birthdate = "";
+
+   }
+
+   $e = new Emp();
+
+   $e->name = "sachin";
+
+   $e->hobbies  = "sports";
+
+   $e->birthdate = date('m/d/Y h:i:s a', "8/5/1974 12:20:03 p");
+
+   $e->birthdate = date('m/d/Y h:i:s a', strtotime("8/5/1974 12:20:03"));
+
+   echo json_encode($e);
+
+?>
+
+结果
+
+{"name":"sachin","hobbies":"sports","birthdate":"08\/05\/1974 12:20:03 pm"}
+
+2.数组。
+
+定义一个键值对数组
+
+<?php
+
+   $arr = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+
+   echo json_encode($arr);
+
+?>
+
+结果
+
+{"a":1,"b":2,"c":3,"d":4,"e":5}
+
+我们可以知道都是转为了json格式数据，其实重点不在于结果相同，因为都是转为json么。。我们需要知道的是可以转为json格式的数据类型是对象和键值对数组
+
+二：其次是json_decode()。对 JSON 格式的字符串进行解码，并转换为 PHP 变量。
+
+先上代码
+
+<?php
+
+   $json = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
+
+   var_dump(json_decode($json));
+
+   var_dump(json_decode($json, true));
+
+?>
